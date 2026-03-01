@@ -55,6 +55,18 @@ def preprocess_input(raw: dict, models: dict):
     return pd.DataFrame(scaled, columns=cols), df
 
 
+def _resolve_learner_type(score: float, pass_prob: float, cluster_label: str) -> str:
+    if score >= 75 and pass_prob >= 70:
+        return "High Achiever"
+    if score >= 60 and pass_prob >= 50:
+        return "Developing Learner"
+    if score >= 40:
+        return "Average Learner"
+    if score >= 20:
+        return "Struggling Learner"
+    return "At Risk Learner"
+
+
 def run_predictions(raw: dict, models: dict) -> dict:
     scaled_df, _ = preprocess_input(raw, models)
 
@@ -62,14 +74,17 @@ def run_predictions(raw: dict, models: dict) -> dict:
     proba        = models['classifier'].predict_proba(scaled_df)[0]
     pred_score   = round(float(np.clip(models['regressor'].predict(scaled_df)[0], 0, 100)), 2)
     pred_cluster = int(models['kmeans'].predict(scaled_df)[0])
-    ltype        = models['cluster_label_map'].get(pred_cluster, "Unknown")
+    raw_ltype    = models['cluster_label_map'].get(pred_cluster, "Unknown")
+    pass_prob    = round(float(proba[1]) * 100, 1)
+    ltype        = _resolve_learner_type(pred_score, pass_prob, raw_ltype)
 
     return {
         "pred_score"             : pred_score,
         "pred_class"             : pred_class,
-        "pass_probability"       : round(float(proba[1]) * 100, 1),
+        "pass_probability"       : pass_prob,
         "fail_probability"       : round(float(proba[0]) * 100, 1),
         "pred_learner_type"      : ltype,
+        "raw_cluster_label"      : raw_ltype,
         "pred_cluster"           : pred_cluster,
         "study_hours"            : raw['study_hours'],
         "sleep_hours"            : raw['sleep_hours'],
@@ -136,7 +151,9 @@ def generate_recommendations(results: dict) -> list:
         tips.append(("Connectivity", "Poor internet detected. Download study materials in advance for offline access."))
 
     learner = strip_emoji(results['pred_learner_type'])
-    if 'Struggling' in learner:
+    if 'At Risk' in learner:
+        tips.append(("Learner profile", "Seek immediate academic support — a tutor, study group, or advisor can help you build a recovery plan."))
+    elif 'Struggling' in learner:
         tips.append(("Learner profile", "Join a study group or work with a tutor. Peer learning significantly accelerates understanding."))
     elif 'Average' in learner:
         tips.append(("Learner profile", "Set small measurable daily goals and review your progress at the end of each week."))

@@ -1,9 +1,3 @@
-"""
-pages.py
-────────
-All Streamlit page-rendering functions (landing, input, results) and the navbar.
-"""
-
 import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
@@ -19,47 +13,11 @@ from utils import (
 )
 
 
-# ─── Navbar ─────────────────────────────────────────────────────────────────
-
 def render_navbar(active_page: str):
-    """Render the top navigation bar with step indicators."""
-    pages = [("landing", "Overview"), ("input", "Input Data"), ("results", "Results")]
-    steps_html = ""
-    done = True
+    label_map = {"landing": "Overview", "input": "Input Data", "results": "Results"}
+    label = label_map.get(active_page, "")
+    st.markdown(f'<div class="breadcrumb">\n  <span class="bc-cur">{label}</span>\n</div>', unsafe_allow_html=True)
 
-    for pg, label in pages:
-        is_active = pg == active_page
-        is_done   = done and pg != active_page
-        cls = "active" if is_active else ("done" if is_done else "")
-        idx = pages.index((pg, label)) + 1
-        if is_active:
-            done = False
-        steps_html += f"""
-        <div class="nav-step {cls}">
-            <div class="nav-step-num">{'✓' if is_done else idx}</div>
-            {label}
-        </div>"""
-        if pg != "results":
-            steps_html += '<span class="nav-step-sep">›</span>'
-
-    badge_map = {"landing": "Home", "input": "Step 1 of 2", "results": "Step 2 of 2"}
-
-    st.markdown(f"""
-    <div class="navbar">
-        <div class="nav-logo">
-            <div class="nav-logo-mark">A</div>
-            <div>
-                <div class="nav-logo-text">AcadIQ</div>
-                <div class="nav-logo-sub">Performance Analytics</div>
-            </div>
-        </div>
-        <div class="nav-steps">{steps_html}</div>
-        <div class="nav-badge">{badge_map.get(active_page, '')}</div>
-    </div>
-    """, unsafe_allow_html=True)
-
-
-# ─── Landing page ───────────────────────────────────────────────────────────
 
 def show_landing_page():
     render_navbar("landing")
@@ -90,7 +48,6 @@ def show_landing_page():
 
     st.divider()
 
-    # ── Core features ──
     with st.container():
         st.header("Core Features")
         f1, f2, f3 = st.columns(3)
@@ -115,7 +72,6 @@ def show_landing_page():
 
     st.divider()
 
-    # ── How it works ──
     with st.container():
         st.caption("How It Works")
         st.header("Three steps to your report")
@@ -144,15 +100,12 @@ def show_landing_page():
             )
 
 
-# ─── Input page ─────────────────────────────────────────────────────────────
-
 def show_input_page(models: dict):
     render_navbar("input")
 
-    with st.container():
-        st.caption("AcadIQ › Input Data")
-        st.header("Enter Your Information")
-        st.write("Fill in all fields accurately for the best prediction. The live summary on the right updates as you type.")
+    st.title("Input Data — Home")
+    st.subheader("Provide study, lifestyle and wellbeing information")
+    st.write("Fill in the fields below. The live summary updates as you type.")
 
     col1, col2, col3 = st.columns(3, gap="large")
 

@@ -2,7 +2,7 @@ import streamlit as st
 
 from styles import get_css
 from models import load_all_models
-from pages import show_landing_page, show_input_page, show_results_page
+from pages import show_input_page, show_results_page
 
 st.set_page_config(
     page_title="AcadIQ · Student Performance Predictor",
@@ -24,7 +24,7 @@ Place these files in the Notebook/student_ml_app/ folder:
     """)
     st.stop()
 
-for key, default in [('page', 'landing'), ('results', {}), ('raw_input', {}), ('validation_warns', [])]:
+for key, default in [('page', 'input'), ('results', {}), ('raw_input', {}), ('validation_warns', [])]:
     if key not in st.session_state:
         st.session_state[key] = default
 

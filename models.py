@@ -9,12 +9,12 @@ import streamlit as st
 def load_all_models() -> dict:
     m = {}
     try:
-        m['classifier']        = joblib.load("Notebook/student_ml_app/classification_model.pkl")
-        m['regressor']         = joblib.load("Notebook/student_ml_app/regression_model.pkl")
-        m['kmeans']            = joblib.load("Notebook/student_ml_app/clustering_model.pkl")
-        m['scaler']            = joblib.load("Notebook/student_ml_app/scaler.pkl")
-        m['feature_columns']   = joblib.load("Notebook/student_ml_app/feature_columns.pkl")
-        m['cluster_label_map'] = joblib.load("Notebook/student_ml_app/cluster_label_map.pkl")
+        m['classifier']        = joblib.load("model/classification_model.pkl")
+        m['regressor']         = joblib.load("model/regression_model.pkl")
+        m['kmeans']            = joblib.load("model/clustering_model.pkl")
+        m['scaler']            = joblib.load("model/scaler.pkl")
+        m['feature_columns']   = joblib.load("model/feature_columns.pkl")
+        m['cluster_label_map'] = joblib.load("model/cluster_label_map.pkl")
         m['loaded']            = True
     except FileNotFoundError as e:
         m['loaded'] = False

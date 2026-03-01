@@ -78,30 +78,6 @@ html, body, [class*="css"] {
 }
 * { box-sizing: border-box; }
 
-.navbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 48px;
-    height: 60px;
-    background: var(--nav-bg);
-    border-bottom: 1px solid var(--border);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-}
-.nav-logo { display: flex; align-items: center; gap: 10px; }
-.nav-logo-mark { width: 32px; height: 32px; background: var(--brand); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; color: #000; letter-spacing: -0.02em; }
-.nav-logo-text { font-size: 15px; font-weight: 700; color: var(--text-heading); letter-spacing: -0.01em; }
-.nav-logo-sub { font-size: 11px; color: var(--text-muted); font-weight: 400; }
-.nav-badge { font-size: 11px; font-weight: 600; color: var(--brand); background: var(--brand-soft); border: 1px solid rgba(255,255,255,0.2); border-radius: 20px; padding: 4px 12px; letter-spacing: 0.02em; }
-.nav-steps { display: flex; align-items: center; gap: 4px; }
-.nav-step { display: flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; color: var(--nav-text); letter-spacing: 0.02em; }
-.nav-step.active { background: var(--nav-active-bg); color: var(--nav-active-text); }
-.nav-step-num { width: 18px; height: 18px; border-radius: 50%; background: var(--border); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; color: var(--text-muted); }
-.nav-step.active .nav-step-num { background: var(--brand); color: #000; }
-.nav-step.done .nav-step-num { background: var(--success); color: #fff; }
-.nav-step-sep { color: var(--border); font-size: 12px; }
 
 .page-wrap { max-width: 1200px; margin: 0 auto; padding: 0 48px; }
 

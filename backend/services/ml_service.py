@@ -58,7 +58,7 @@ def preprocess_input(raw: dict, models: dict):
     # Categorical encoding — must match training encoding
     df['gender']            = df['gender'].map({'Male': 1, 'Female': 0, 'Other': 2})
     df['academic_level']    = df['academic_level'].map({'High School': 0, 'Undergraduate': 1, 'Postgraduate': 1})
-    df['internet_quality']  = df['internet_quality'].map({'Good': 1, 'Poor': 0})
+    df['internet_quality']  = df['internet_quality'].map({'Good': 1, 'Excellent': 1, 'Average': 0, 'Poor': 0})
     df['part_time_job']     = 1 if raw['part_time_job']     == 'Yes' else 0
     df['upcoming_deadline'] = 1 if raw['upcoming_deadline'] == 'Yes' else 0
 
@@ -199,7 +199,7 @@ def generate_recommendations(results: dict) -> list:
     if results['exercise_minutes'] < 20:
         tips.append(("Exercise", "Less than 20 minutes of activity per day. A 30-minute walk improves focus and retention."))
 
-    if results['internet_quality'] == 'Poor':
+    if results['internet_quality'] in ('Poor', 'Average'):
         tips.append(("Connectivity", "Poor internet detected. Download study materials in advance for offline access."))
 
     learner = _strip_emoji(results['pred_learner_type'])

@@ -291,7 +291,13 @@ export default function InputForm() {
     } catch (err) {
       clearTimeout(t1); clearTimeout(t2)
       setLoading(false)
-      setApiError(err.response?.data?.detail || 'Prediction failed. Please try again.')
+      setApiError(
+        typeof err.response?.data?.detail === 'string'
+          ? err.response.data.detail
+          : Array.isArray(err.response?.data?.detail)
+          ? err.response.data.detail.map(e => e.msg).join(', ')
+          : 'Prediction failed. Please try again.'
+      )
     }
   }
 

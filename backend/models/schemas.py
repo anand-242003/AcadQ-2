@@ -19,7 +19,7 @@ class StudentInput(BaseModel):
     caffeine_intake_mg: int = Field(ge=0, le=600, default=100)
     part_time_job: Literal["Yes", "No"] = "No"
     upcoming_deadline: Literal["Yes", "No"] = "No"
-    internet_quality: Literal["Good", "Poor"] = "Good"
+    internet_quality: Literal["Good", "Poor", "Average", "Excellent"] = "Good"
     mental_health_score: int = Field(ge=1, le=10, default=7)
     focus_index: float = Field(ge=0, le=100, default=60.0)
     burnout_level: float = Field(ge=0, le=100, default=30.0)

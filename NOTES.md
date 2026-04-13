@@ -99,6 +99,66 @@ Frontend runs at http://localhost:5173, backend at http://localhost:8000.
 
 ---
 
+## 6. Deployment
+
+### Backend — Render (recommended)
+
+1. Push your repo to GitHub
+2. Go to https://render.com → **New → Web Service**
+3. Connect your repo and set:
+   - **Root Directory**: `backend`
+   - **Build Command**: `pip install -r requirements.txt`
+   - **Start Command**: `uvicorn main:app --host 0.0.0.0 --port $PORT`
+   - **Environment**: Python 3
+4. Add environment variables in the Render dashboard (same keys as `backend/.env`):
+   ```
+   MONGODB_URI=...
+   SECRET_KEY=...
+   GROQ_API_KEY=...
+   JWT_ALGORITHM=HS256
+   JWT_EXPIRE_DAYS=7
+   ```
+5. The `backend/Procfile` is already configured for this setup
+
+> **Note**: The `model/` and `backend/chroma_db/` directories must be committed to the repo — Render needs them at runtime.
+
+---
+
+### Frontend — Vercel (recommended)
+
+1. Go to https://vercel.com → **New Project** → import your repo
+2. Set:
+   - **Root Directory**: `frontend`
+   - **Build Command**: `npm run build`
+   - **Output Directory**: `dist`
+3. Add environment variable:
+   ```
+   VITE_API_URL=https://your-render-backend-url.onrender.com
+   ```
+4. Deploy — Vercel auto-deploys on every push to `main`
+
+---
+
+### Alternative: Heroku (backend)
+
+The `Procfile` at `backend/Procfile` is already set up for Heroku:
+
+```bash
+heroku create your-app-name
+heroku config:set MONGODB_URI=... SECRET_KEY=... GROQ_API_KEY=...
+git subtree push --prefix backend heroku main
+```
+
+---
+
+### Alternative: Railway
+
+1. New project → Deploy from GitHub repo
+2. Set root to `backend`, add the same env vars as above
+3. Railway auto-detects the `Procfile`
+
+---
+
 ## External Accounts Needed
 
 | Service | Purpose | Free Tier |

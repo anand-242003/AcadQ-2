@@ -42,3 +42,16 @@ def insert_user(user: dict) -> str:
 def user_exists(email: str) -> bool:
     db = get_db()
     return db["users"].count_documents({"email": email}) > 0
+
+
+# ─── Reports ──────────────────────────────────────────────────────────────────
+
+def insert_report(report: dict) -> str:
+    db = get_db()
+    result = db["reports"].insert_one(report)
+    return str(result.inserted_id)
+
+
+def get_reports_by_user(email: str) -> list[dict]:
+    db = get_db()
+    return list(db["reports"].find({"user_email": email}).sort("timestamp", -1))

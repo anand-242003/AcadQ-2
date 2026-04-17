@@ -8,6 +8,8 @@ const Auth       = lazy(() => import('./pages/Auth'))
 const InputForm  = lazy(() => import('./pages/InputForm'))
 const Results    = lazy(() => import('./pages/Results'))
 const StudyCoach = lazy(() => import('./pages/StudyCoach'))
+const QuizBot    = lazy(() => import('./pages/QuizBot'))
+const History    = lazy(() => import('./pages/History'))
 
 function PageLoader() {
   return (
@@ -28,6 +30,8 @@ export default function App() {
             <Route path="/input" element={<ProtectedRoute><InputForm /></ProtectedRoute>} />
             <Route path="/results" element={<ProtectedRoute><Results /></ProtectedRoute>} />
             <Route path="/coach" element={<ProtectedRoute><StudyCoach /></ProtectedRoute>} />
+            <Route path="/quiz" element={<ProtectedRoute><QuizBot /></ProtectedRoute>} />
+            <Route path="/history" element={<ProtectedRoute><History /></ProtectedRoute>} />
           </Routes>
         </Suspense>
       </BrowserRouter>

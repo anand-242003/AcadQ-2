@@ -21,6 +21,7 @@ export const authAPI = {
 
 export const predictAPI = {
   predict: (data) => api.post('/predict', data),
+  getHistory: () => api.get('/predict/history'),
 }
 
 export const coachAPI = {
@@ -28,6 +29,10 @@ export const coachAPI = {
   plan:     (data)  => api.post('/coach/plan', data),
   diagnose: (data)  => api.post('/coach/diagnose', data),
   reset:    ()      => api.delete('/coach/reset'),
+}
+
+export const quizAPI = {
+  generate: (data) => api.post('/quiz/generate', data),
 }
 
 export default api

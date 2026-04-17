@@ -34,11 +34,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-from routes import auth, predict, coach
+from routes import auth, predict, coach, quiz
 
 app.include_router(auth.router, prefix="/auth", tags=["Auth"])
 app.include_router(predict.router, prefix="/predict", tags=["Predict"])
 app.include_router(coach.router, prefix="/coach", tags=["Coach"])
+app.include_router(quiz.router, prefix="/quiz", tags=["Quiz"])
 
 
 @app.get("/", tags=["Health"])

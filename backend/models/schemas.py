@@ -56,6 +56,20 @@ class PredictionResponse(BaseModel):
     recommendations: list[RecommendationItem]
 
 
+# ─── Report Schemas ───────────────────────────────────────────────────────────
+
+class ReportItem(BaseModel):
+    id: str  # MongoDB ObjectId as string
+    user_email: str
+    timestamp: str  # ISO format
+    prediction: PredictionResponse
+    input_data: StudentInput  # Store the input for reference
+
+
+class ReportsHistoryResponse(BaseModel):
+    reports: list[ReportItem]
+
+
 # ─── Auth Schemas ─────────────────────────────────────────────────────────────
 
 class RegisterRequest(BaseModel):
@@ -129,3 +143,29 @@ class DiagnoseResponse(BaseModel):
 
 class MessageResponse(BaseModel):
     message: str
+
+# ─── Quiz Schemas ─────────────────────────────────────────────────────────────
+
+class QuizGenerateRequest(BaseModel):
+    topic: str = Field(..., min_length=1, max_length=100)
+    count: int = Field(ge=1, le=20, default=5)
+    level: str = Field(default="High School")
+    difficulty: str = Field(default="Average")
+    distractor_count: int = Field(ge=1, le=5, default=3)
+    include_answers: bool = Field(default=True)
+    language: str = Field(default="English (USA)")
+
+class QuizOption(BaseModel):
+    label: str  # e.g., "A", "B", "C"
+    text: str
+
+class QuizQuestion(BaseModel):
+    number: int
+    question: str
+    options: list[QuizOption]
+    correct_option_label: str
+    explanation: Optional[str] = None
+
+class QuizGenerateResponse(BaseModel):
+    title: str
+    questions: list[QuizQuestion]

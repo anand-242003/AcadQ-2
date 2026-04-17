@@ -6,6 +6,7 @@ import { jsPDF } from 'jspdf'
 import Navbar from '../components/Navbar'
 import RadarChart from '../components/RadarChart'
 import Toast from '../components/Toast'
+import { predictAPI } from '../api/client'
 
 // ─── Score Ring ───────────────────────────────────────────────────────────────
 function ScoreRing({ score }) {
@@ -67,8 +68,38 @@ const CATEGORY_COLORS = {
 export default function Results() {
   const location = useLocation()
   const navigate = useNavigate()
-  const { result, input } = location.state || {}
+  const { result: stateResult, input: stateInput } = location.state || {}
+  const [result, setResult] = useState(stateResult)
+  const [input, setInput] = useState(stateInput)
+  const [loading, setLoading] = useState(!stateResult)
   const [toast, setToast] = useState({ message: '', type: '' })
+
+  // Fetch latest report from database if no state
+  useEffect(() => {
+    if (!stateResult) {
+      const fetchLatestReport = async () => {
+        try {
+          const res = await predictAPI.getHistory()
+          const reports = res.data.reports
+          if (reports.length > 0) {
+            const latest = reports[0] // Most recent first
+            setResult(latest.prediction)
+            setInput(latest.input_data)
+          } else {
+            navigate('/input', { replace: true })
+          }
+        } catch (err) {
+          console.error('Failed to fetch report:', err)
+          navigate('/input', { replace: true })
+        } finally {
+          setLoading(false)
+        }
+      }
+      fetchLatestReport()
+    } else {
+      setLoading(false)
+    }
+  }, [stateResult, navigate])
 
   // Confetti on pass — fires once
   useEffect(() => {
@@ -83,7 +114,18 @@ export default function Results() {
       }, 600)
       return () => clearTimeout(t)
     }
-  }, [])
+  }, [result])
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#0A0A0F] text-white flex flex-col">
+        <Navbar />
+        <div className="flex-1 flex items-center justify-center">
+          <div className="w-12 h-12 rounded-full border-4 border-[#6C63FF]/30 border-t-[#6C63FF] animate-spin" />
+        </div>
+      </div>
+    )
+  }
 
   if (!result || !input) return <Navigate to="/input" replace />
 

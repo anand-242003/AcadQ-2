@@ -32,6 +32,61 @@ Milestone 2 (in progress) will extend this into a full agentic AI study coach us
 
 ---
 
+## Getting Started
+
+### Prerequisites
+- Python 3.8+
+- Node.js 18+ (via nvm, not Homebrew on macOS)
+- MongoDB Atlas account
+- Groq API key
+
+### Installation
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/anand-242003/AcadQ-2.git
+   cd AcadQ-2
+   ```
+
+2. Set up Python virtual environment:
+   ```bash
+   python3 -m venv .venv
+   source .venv/bin/activate
+   cd backend
+   pip install -r requirements.txt
+   ```
+
+3. Set up environment variables:
+   ```bash
+   cp .env.example .env
+   # Edit .env with your MongoDB URI and Groq API key
+   ```
+
+4. Set up frontend:
+   ```bash
+   cd ../frontend
+   npm install
+   ```
+
+### Running the Application
+
+1. **Backend (FastAPI):**
+   ```bash
+   source ../.venv/bin/activate
+   cd backend
+   uvicorn main:app --reload --host 0.0.0.0 --port 8000
+   ```
+
+2. **Frontend (React):**
+   In a new terminal:
+   ```bash
+   cd frontend
+   npm run dev
+   ```
+
+3. Open your browser to `http://localhost:3000` and start using AcadIQ!
+
+---
+
 ## Project Overview
 
 AcadIQ addresses the early identification of at-risk students using behavioral and academic trace data collected before final examinations. The system produces three simultaneous outputs from a single prediction pass:

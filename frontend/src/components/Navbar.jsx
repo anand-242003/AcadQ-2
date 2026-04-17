@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
-import { Sparkles, LogOut, ChevronDown, BarChart2, MessageSquare } from 'lucide-react'
+import { Sparkles, LogOut, ChevronDown, BarChart2, MessageSquare, BookOpen } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 
 export default function Navbar() {
@@ -77,6 +77,16 @@ export default function Navbar() {
                   isActive('/coach') ? 'bg-[#6C63FF]/20 text-[#6C63FF]' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-white/5'
                 }`}>
                   <MessageSquare size={15} /> Coach
+                </Link>
+                <Link to="/quiz" className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${
+                  isActive('/quiz') ? 'bg-[#6C63FF]/20 text-[#6C63FF]' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-white/5'
+                }`}>
+                  <BookOpen size={15} /> Quiz Bot
+                </Link>
+                <Link to="/history" className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${
+                  isActive('/history') ? 'bg-[#6C63FF]/20 text-[#6C63FF]' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-white/5'
+                }`}>
+                  <BarChart2 size={15} /> History
                 </Link>
               </div>
 

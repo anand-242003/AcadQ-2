@@ -1,14 +1,24 @@
+"""Utility functions and chart constants for AcadIQ."""
+
+
 def get_score_color(score: float) -> str:
+    """Return color for score display (light theme)."""
     if score >= 60:
-        return "#FFFFFF"
+        return "#1b6a5b"  # secondary/green
     if score >= 40:
-        return "#F59E0B"
-    return "#EF4444"
+        return "#ae2448"  # accent amber
+    return "#ba1a1a"      # error red
 
 
 def get_score_grade(score: float) -> str:
-    if score >= 75:
+    if score >= 90:
+        return "A+"
+    if score >= 80:
         return "A"
+    if score >= 75:
+        return "A-"
+    if score >= 70:
+        return "B+"
     if score >= 60:
         return "B"
     if score >= 45:
@@ -67,12 +77,14 @@ def validate_inputs(raw: dict) -> list:
     return errors
 
 
+# ─── Chart Configuration (Light Theme) ──────────────────────────────────────
+
 CHART_BASE = dict(
     paper_bgcolor='rgba(0,0,0,0)',
     plot_bgcolor='rgba(0,0,0,0)',
     font=dict(
-        family='-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif',
-        color='#A0A0A0',
+        family='Inter, sans-serif',
+        color='#544246',
         size=11,
     ),
     margin=dict(t=20, b=16, l=8, r=16),
@@ -80,11 +92,11 @@ CHART_BASE = dict(
 )
 
 C = {
-    "c1": "#FFFFFF",
-    "c2": "#10B981",
-    "c3": "#F59E0B",
-    "c4": "#EF4444",
-    "c5": "#3B82F6",
-    "grid": "#1E1E1E",
-    "axis": "#A0A0A0",
+    "c1": "#510122",   # primary
+    "c2": "#1b6a5b",   # secondary
+    "c3": "#ae2448",   # accent
+    "c4": "#877276",   # muted
+    "c5": "#6e1a37",   # primary-container
+    "grid": "rgba(218,192,196,.15)",
+    "axis": "#544246",
 }

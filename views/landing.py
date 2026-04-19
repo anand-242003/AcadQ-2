@@ -14,11 +14,12 @@ def _nav():
 </style>
 <div class="nav-bar">
 <div class="nav-logo">AcadIQ</div>
-<div class="nav-links">
-<a href="/?p=dash" class="nav-link nav-link-active">Predictor</a>
-<a href="/?p=coach" class="nav-link">Coach</a>
-<a href="/?p=methodology" class="nav-link">Methodology</a>
-</div>
+        <a href="/?p=dash" class="nav-link">Predictor</a>
+        <a href="/?p=plan" class="nav-link">Study Plan</a>
+        <a href="/?p=quiz" class="nav-link">Quiz Bot</a>
+        <a href="/?p=resources" class="nav-link">Resources</a>
+        <a href="/?p=coach" class="nav-link">AI Coach</a>
+    </div>
 <div></div>
 </div>""", unsafe_allow_html=True)
     st.markdown("<div style='height:66px'></div>", unsafe_allow_html=True)

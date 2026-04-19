@@ -29,7 +29,7 @@ if not models.get("loaded"):
 # ── Page Routing ─────────────────────────────────────────────────────────────
 if "p" in st.query_params:
     val = st.query_params["p"]
-    if val in ["dash", "plan", "quiz", "resources"]:
+    if val in ["dash", "plan", "quiz", "resources", "coach"]:
         st.session_state["page"] = "dashboard" if val == "dash" else val
     else:
         st.session_state["page"] = "landing"

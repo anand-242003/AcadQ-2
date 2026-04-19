@@ -4,10 +4,10 @@
 def get_score_color(score: float) -> str:
     """Return color for score display (light theme)."""
     if score >= 60:
-        return "#1b6a5b"  # secondary/green
+        return "#1b6a5b"
     if score >= 40:
-        return "#ae2448"  # accent amber
-    return "#ba1a1a"      # error red
+        return "#ae2448"
+    return "#ba1a1a"
 
 
 def get_score_grade(score: float) -> str:
@@ -77,7 +77,7 @@ def validate_inputs(raw: dict) -> list:
     return errors
 
 
-# ─── Chart Configuration (Light Theme) ──────────────────────────────────────
+
 
 CHART_BASE = dict(
     paper_bgcolor='rgba(0,0,0,0)',
@@ -92,11 +92,11 @@ CHART_BASE = dict(
 )
 
 C = {
-    "c1": "#510122",   # primary
-    "c2": "#1b6a5b",   # secondary
-    "c3": "#ae2448",   # accent
-    "c4": "#877276",   # muted
-    "c5": "#6e1a37",   # primary-container
+    "c1": "#510122",
+    "c2": "#1b6a5b",
+    "c3": "#ae2448",
+    "c4": "#877276",
+    "c5": "#6e1a37",
     "grid": "rgba(218,192,196,.15)",
     "axis": "#544246",
 }

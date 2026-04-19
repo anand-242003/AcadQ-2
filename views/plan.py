@@ -14,15 +14,15 @@ def _render_topbar():
 def _render_plan(plan_text: str):
     """Render the generated study plan."""
     st.markdown('<div style="background:#fff;border-radius:24px;padding:40px;border:1px solid rgba(218,192,196,.15);box-shadow:0 12px 32px rgba(81,1,34,.03)">', unsafe_allow_html=True)
-    
+
     lines = plan_text.split("\n")
     for line in lines:
         line = line.strip()
         if not line:
             continue
-            
+
         if line.startswith("Day "):
-            # Split Day X: ...
+
             if ":" in line:
                 day_part, rest = line.split(":", 1)
                 st.markdown(f'''
@@ -41,7 +41,7 @@ def _render_plan(plan_text: str):
             st.markdown(f'<div style="margin-left: 76px; margin-bottom: 12px; color: #544246; font-size: 14px; display: flex; gap: 12px;"><span style="color: #6e1a37; font-weight: 900;">•</span> <span>{line[2:]}</span></div>', unsafe_allow_html=True)
         else:
             st.markdown(f'<div style="margin-left: 76px; margin-bottom: 16px; color: #544246; font-size: 14px; line-height: 1.6;">{line}</div>', unsafe_allow_html=True)
-            
+
     st.markdown('</div>', unsafe_allow_html=True)
 
 
@@ -63,10 +63,10 @@ def show_plan():
             "risk_assessment": "Moderate",
         }
 
-    # Check if we already have a generated plan in session
+
     if "current_plan" not in st.session_state:
         st.markdown('<div style="background:#1a1a24;border-radius:24px;padding:48px;text-align:center;border:1px solid rgba(255,255,255,.05);position:relative;overflow:hidden"><div style="position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle at 50% 50%, rgba(242,131,160,0.08) 0%, transparent 60%);pointer-events:none"></div><div style="font-family:Manrope,sans-serif;font-size:24px;font-weight:800;color:#ffffff;letter-spacing:-0.5px;margin-bottom:12px">Ready to execute?</div><p style="color:rgba(255,255,255,.6);font-size:14px;max-width:400px;margin:0 auto 24px auto;line-height:1.6">We will construct a 7-day optimized schedule specifically targeting your weak points to maximize your academic performance.</p></div>', unsafe_allow_html=True)
-        
+
         _, btn_col, _ = st.columns([1, 1, 1])
         with btn_col:
             st.markdown("<div style='height:24px'></div>", unsafe_allow_html=True)
@@ -95,17 +95,17 @@ def show_plan():
                             weaknesses = results.get("top_weaknesses", [])
                             query = " ".join([w.get("feature", "").replace("_", " ") for w in weaknesses]) if weaknesses else f"{results.get('learner_type', 'student')} study improvement"
                             retrieved = retrieve_resources(query, k=3)
-                            
-                            # Convert dicts or objects to list of dicts natively expected by the view
+
+
                             resc_dicts = []
                             for r in retrieved:
                                 resc_dicts.append({
-                                    "title": r.get('title', 'Resource'), 
-                                    "topic": r.get('topic', 'Paper'), 
+                                    "title": r.get('title', 'Resource'),
+                                    "topic": r.get('topic', 'Paper'),
                                     "description": r.get('description', ''),
                                     "url": r.get('url', '')
                                 })
-                            
+
                             result = generate_plan(results, retrieved)
                             st.session_state["current_plan"] = result.get("plan", "Plan generation completed.")
                             st.session_state["plan_resources"] = resc_dicts
@@ -113,19 +113,19 @@ def show_plan():
                         except Exception as fallback_e:
                             st.error(f"AI Plan Generation failed internally: {str(fallback_e)}")
     else:
-        # Display the existing plan
+
         _render_plan(st.session_state["current_plan"])
-        
+
         st.markdown("<div style='height:32px'></div>", unsafe_allow_html=True)
         st.markdown('<h3 style="font-family:Manrope,sans-serif;font-size:22px;font-weight:800;color:#1a1c1b;margin-bottom:16px">Recommended Resources</h3>', unsafe_allow_html=True)
-        
+
         resources = st.session_state.get("plan_resources", [])
         if resources:
             for r in resources:
                 st.markdown(f'<div style="background:#f4f3f1;border-radius:16px;padding:20px;border:1px solid rgba(218,192,196,.15);margin-bottom:12px;transition:transform 0.2s;cursor:pointer" onmouseover="this.style.transform=\'translateY(-2px)\'" onmouseout="this.style.transform=\'none\'"><div style="display:flex;align-items:center;justify-content:space-between"><div style="font-weight:700;color:#6e1a37;font-size:15px">{r.get("title", "Resource")}</div><div style="font-size:11px;font-weight:700;color:#1b6a5b;background:rgba(167,241,222,.3);padding:4px 10px;border-radius:99px;text-transform:uppercase;letter-spacing:1px">{r.get("topic", "Material")}</div></div><p style="font-size:13px;color:#544246;margin:8px 0 0 0;line-height:1.6">{r.get("description", "")}</p></div>', unsafe_allow_html=True)
         else:
             st.info("No specific resources recommended for this plan phase.")
-            
+
         st.markdown("<div style='height:24px'></div>", unsafe_allow_html=True)
         if st.button("Regenerate Plan", use_container_width=False):
             del st.session_state["current_plan"]

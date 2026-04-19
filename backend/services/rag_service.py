@@ -134,7 +134,7 @@ def initialize_vector_store() -> None:
 
     embeddings = _get_embeddings()
 
-    # Try to load existing store first
+
     try:
         existing = Chroma(
             persist_directory=CHROMA_DIR,

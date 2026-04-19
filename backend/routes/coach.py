@@ -16,13 +16,13 @@ from routes.auth import get_current_user
 
 router = APIRouter()
 
-# ─── Rate Limiting Store ──────────────────────────────────────────────────────
-# { user_email: [list of timestamps] }
-_rate_limit_store: dict = defaultdict(list)
-RATE_LIMIT_MAX = 20       # max messages
-RATE_LIMIT_WINDOW = 3600  # per hour (seconds)
 
-# ─── Layer 2: Blocked Keywords ────────────────────────────────────────────────
+
+_rate_limit_store: dict = defaultdict(list)
+RATE_LIMIT_MAX = 20
+RATE_LIMIT_WINDOW = 3600
+
+
 BLOCKED_KEYWORDS = [
     "hack", "illegal", "drug", "weapon", "bomb", "kill", "steal",
     "cheat exam", "fraud", "jailbreak", "ignore instructions",
@@ -30,7 +30,7 @@ BLOCKED_KEYWORDS = [
     "dan", "override", "bypass",
 ]
 
-# ─── Layer 3: Academic Keywords ───────────────────────────────────────────────
+
 ACADEMIC_KEYWORDS = [
     "study", "exam", "score", "focus", "sleep", "plan", "resource",
     "learn", "grade", "quiz", "assignment", "mental health", "productivity",
@@ -38,7 +38,7 @@ ACADEMIC_KEYWORDS = [
     "coach", "marks", "syllabus", "revision", "notes", "lecture",
 ]
 
-# ─── Layer 4: Harmful Output Signals ─────────────────────────────────────────
+
 HARMFUL_OUTPUT_SIGNALS = [
     "here is how to",
     "you can hack",
@@ -82,7 +82,7 @@ def _check_rate_limit(user_email: str) -> None:
     """Raise 429 if user has exceeded 20 messages in the last hour."""
     now = datetime.utcnow()
     window_start = now - timedelta(seconds=RATE_LIMIT_WINDOW)
-    # Prune old timestamps
+
     _rate_limit_store[user_email] = [
         ts for ts in _rate_limit_store[user_email] if ts > window_start
     ]
@@ -106,11 +106,11 @@ def _layer2_input_filter(message: str) -> str | None:
 def _layer3_topic_check(message: str) -> str | None:
     """Return off-topic warning string to append to prompt if message seems off-topic, else None."""
     if len(message) <= 20:
-        return None  # short messages get a pass
+        return None
     msg_lower = message.lower()
     for keyword in ACADEMIC_KEYWORDS:
         if keyword in msg_lower:
-            return None  # on-topic
+            return None
     return "The user may be going off-topic. Remind them you are a study coach only."
 
 
@@ -182,12 +182,12 @@ async def chat(
     request: CoachChatRequest,
     current_user: str = Depends(get_current_user),
 ):
-    # ── Rate limit check ──────────────────────────────────────────────────────
+
     _check_rate_limit(current_user)
 
     message = request.message
 
-    # ── Layer 2: Input keyword filter ─────────────────────────────────────────
+
     blocked = _layer2_input_filter(message)
     if blocked:
         return CoachChatResponse(
@@ -195,7 +195,7 @@ async def chat(
             session_id=coach_service.get_session_id(current_user),
         )
 
-    # ── Layer 3: Topic relevance check ────────────────────────────────────────
+
     off_topic_warning = _layer3_topic_check(message)
     if off_topic_warning:
         message = f"{message}\n\n[SYSTEM NOTE: {off_topic_warning}]"
@@ -204,7 +204,7 @@ async def chat(
         profile = request.student_profile.model_dump()
         raw_reply = coach_service.chat(current_user, message, profile)
 
-        # ── Layer 4: Output filter ────────────────────────────────────────────
+
         safe_reply = _layer4_output_filter(raw_reply)
 
         session_id = coach_service.get_session_id(current_user)
@@ -222,7 +222,7 @@ async def chat(
 @router.delete("/reset", response_model=MessageResponse)
 async def reset(current_user: str = Depends(get_current_user)):
     coach_service.reset_memory(current_user)
-    # Also reset rate limit on session clear
+
     if current_user in _rate_limit_store:
         del _rate_limit_store[current_user]
     return MessageResponse(message="Session cleared")

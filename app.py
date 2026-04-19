@@ -4,7 +4,7 @@ Main entry point: page config, CSS injection, routing.
 """
 import streamlit as st
 
-# ── Page Config (must be first Streamlit call) ───────────────────────────────
+
 st.set_page_config(
     page_title="AcadIQ | Predict Your Academic Future",
     page_icon="🎓",
@@ -12,13 +12,13 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-# ── Inject Global CSS ────────────────────────────────────────────────────────
+
 from styles import get_global_css, get_material_icons
 
 st.markdown(get_global_css(), unsafe_allow_html=True)
 st.markdown(get_material_icons(), unsafe_allow_html=True)
 
-# ── Load ML Models ───────────────────────────────────────────────────────────
+
 from models import load_all_models
 
 models = load_all_models()
@@ -26,7 +26,7 @@ if not models.get("loaded"):
     st.error(f"⚠️ Models failed to load: {models.get('error', 'Unknown error')}")
     st.stop()
 
-# ── Page Routing ─────────────────────────────────────────────────────────────
+
 if "p" in st.query_params:
     val = st.query_params["p"]
     if val in ["dash", "plan", "quiz", "resources", "coach"]:

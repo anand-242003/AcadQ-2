@@ -20,21 +20,21 @@ def show_quiz_bot():
 
     if "quiz_data" not in st.session_state:
         st.markdown('<div style="background:#fff;border-radius:24px;padding:48px;border:1px solid rgba(218,192,196,.15);box-shadow:0 12px 32px rgba(81,1,34,.03)"><h3 style="font-family:Manrope,sans-serif;font-size:22px;font-weight:800;color:#510122;margin-bottom:24px">Configure Your Session</h3>', unsafe_allow_html=True)
-        
+
         tc, dc = st.columns([2, 1])
         with tc:
             topic = st.text_input("Study Topic", placeholder="e.g. Cellular Biology, Machine Learning, Roman History")
         with dc:
             diff = st.selectbox("Difficulty", ["easy", "medium", "hard"], index=1)
-            
+
         c1, c2 = st.columns(2)
         with c1:
             lvl = st.selectbox("Academic Level", ["high school", "undergraduate", "graduate"], index=1)
         with c2:
             num = st.slider("Number of Questions", 1, 10, 5)
-            
+
         st.markdown("<div style='height:24px'></div>", unsafe_allow_html=True)
-        
+
         if st.button("Generate Quiz", type="primary", use_container_width=True):
             if not topic:
                 st.error("Please enter a topic.")
@@ -71,23 +71,23 @@ def show_quiz_bot():
                             st.error(f"AI Quiz Generation failed internally: {str(fallback_e)}")
         st.markdown("</div>", unsafe_allow_html=True)
     else:
-        # Display the Quiz UI
+
         quiz = st.session_state["quiz_data"]
         submitted = st.session_state.get("quiz_submitted", False)
-        
+
         st.markdown(f'<div style="background:#f4f3f1;padding:16px 24px;border-radius:16px;margin-bottom:24px;border:1px solid rgba(218,192,196,.15);display:flex;justify-content:space-between;align-items:center"><span style="font-family:Manrope;font-weight:800;color:#510122;font-size:18px">{quiz.get("topic", quiz.get("title", "Quiz Bot"))}</span><span style="font-size:12px;font-weight:800;color:#877276;text-transform:uppercase;letter-spacing:1px">{len(quiz["questions"])} Questions</span></div>', unsafe_allow_html=True)
-        
+
         for idx, q_data in enumerate(quiz["questions"]):
             st.markdown(f'<h4 style="font-family:Manrope,sans-serif;font-size:16px;font-weight:700;color:#1a1c1b;margin-bottom:12px">{idx+1}. {q_data["question"]}</h4>', unsafe_allow_html=True)
-            
-            # Use columns to create a neat UI for radio buttons without the markdown clashing
+
+
             ans_key = f"q_{idx}"
             options = q_data.get("options", [])
-            
+
             if not submitted:
                 st.session_state["quiz_answers"][ans_key] = st.radio(
-                    "Options", 
-                    options=options, 
+                    "Options",
+                    options=options,
                     key=f"radio_{idx}",
                     format_func=lambda x: f"{x['label']}. {x['text']}",
                     label_visibility="collapsed"
@@ -96,8 +96,8 @@ def show_quiz_bot():
                 user_ans_dict = st.session_state["quiz_answers"].get(ans_key)
                 user_label = user_ans_dict.get("label") if user_ans_dict else ""
                 correct_label = q_data.get("correct_option_label", "")
-                
-                # Find the text of the correct answer for display
+
+
                 correct_ans_text = next((opt["text"] for opt in options if opt["label"] == correct_label), "Unknown")
                 user_ans_text = user_ans_dict.get("text", "") if user_ans_dict else ""
 
@@ -106,11 +106,11 @@ def show_quiz_bot():
                 else:
                     st.error(f"**Incorrect.** You selected: {user_label}. {user_ans_text}")
                     st.success(f"**Correct Answer:** {correct_label}. {correct_ans_text}")
-                
+
                 with st.expander("Explanation", expanded=(user_label != correct_label)):
                     st.markdown(f'<p style="font-size:14px;color:#544246;margin:0">{q_data["explanation"]}</p>', unsafe_allow_html=True)
             st.markdown("<hr style='border:none;border-top:1px solid rgba(218,192,196,.15);margin:24px 0'>", unsafe_allow_html=True)
-            
+
         if not submitted:
             if st.button("Submit Answers", type="primary", use_container_width=True):
                 st.session_state["quiz_submitted"] = True

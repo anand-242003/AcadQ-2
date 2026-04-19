@@ -8,7 +8,7 @@ load_dotenv()
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Startup: load ML models and initialize ChromaDB
+
     from services import ml_service, rag_service
     print("[Startup] Loading ML models...")
     ml_service.load_models()
@@ -16,7 +16,7 @@ async def lifespan(app: FastAPI):
     rag_service.initialize_vector_store()
     print("[Startup] Ready.")
     yield
-    # Shutdown (nothing to clean up)
+
 
 
 app = FastAPI(

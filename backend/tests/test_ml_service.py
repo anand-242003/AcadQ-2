@@ -158,7 +158,7 @@ class TestGetGrade:
         assert get_grade(20) == "F"
 
 
-# ─── Property-Based Tests (hypothesis) ───────────────────────────────────────
+
 try:
     from hypothesis import given, settings, HealthCheck
     from hypothesis import strategies as st
@@ -204,7 +204,7 @@ if HYPOTHESIS_AVAILABLE:
         assert payload["sub"] == email
 
 if HYPOTHESIS_AVAILABLE:
-    # ── Property 7: compute_top_weaknesses sorted by delta ascending ──────────
+
     @given(
         study_hours=st.floats(min_value=0, max_value=16, allow_nan=False),
         sleep_hours=st.floats(min_value=4, max_value=12, allow_nan=False),
@@ -226,7 +226,7 @@ if HYPOTHESIS_AVAILABLE:
         deltas = [w["delta"] for w in result]
         assert deltas == sorted(deltas)
 
-    # ── Property 5: preprocess_input idempotency ──────────────────────────────
+
     @given(
         study_hours=st.floats(min_value=0, max_value=16, allow_nan=False),
         sleep_hours=st.floats(min_value=4, max_value=12, allow_nan=False),
@@ -249,7 +249,7 @@ if HYPOTHESIS_AVAILABLE:
         np.testing.assert_array_almost_equal(scaled1, scaled2)
 
 if HYPOTHESIS_AVAILABLE:
-    # ── Properties 1, 2, 3: run_predictions with real models ─────────────────
+
     _VALID_GENDERS = ["Male", "Female", "Other"]
     _VALID_LEVELS = ["High School", "Undergraduate", "Postgraduate"]
     _VALID_QUALITY = ["Good", "Poor"]

@@ -9,10 +9,10 @@ API_BASE = "http://localhost:8000"
 def show_coach():
     """Render the AI Study Coach page."""
 
-    # Top bar
+
     st.markdown('<div style="position:fixed;top:0;left:0;right:0;z-index:9999;height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 5%;background:rgba(250,249,247,.92);backdrop-filter:blur(20px);border-bottom:1px solid rgba(218,192,196,.15);font-family:Manrope,sans-serif"><div style="display:flex;align-items:center;gap:32px"><a href="/?p=dash" style="text-decoration:none;display:flex;align-items:center;gap:12px;transition:opacity .2s" onmouseover="this.style.opacity=.8" onmouseout="this.style.opacity=1"><span style="font-size:22px;font-weight:900;color:#6e1a37;letter-spacing:-0.5px">AcadIQ</span><span style="width:1px;height:20px;background:rgba(218,192,196,.3);display:inline-block"></span><span style="font-size:14px;font-weight:700;color:#510122">AI Coach</span></a><div style="display:flex;gap:24px;margin-left:16px"><a href="/?p=dash" style="text-decoration:none;font-size:13px;font-weight:600;color:#544246;font-family:Inter,sans-serif;opacity:.8" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.8">Predictor</a><a href="/?p=plan" style="text-decoration:none;font-size:13px;font-weight:600;color:#544246;font-family:Inter,sans-serif;opacity:.8" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.8">Study Plan</a><a href="/?p=resources" style="text-decoration:none;font-size:13px;font-weight:600;color:#544246;font-family:Inter,sans-serif;opacity:.8" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.8">Resources</a><a href="/?p=quiz" style="text-decoration:none;font-size:13px;font-weight:600;color:#544246;font-family:Inter,sans-serif;opacity:.8" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.8">Quiz Bot</a></div></div><div style="display:flex;align-items:center;gap:12px"><div style="display:flex;align-items:center;gap:6px;background:#f4f3f1;padding:6px 14px;border-radius:99px;border:1px solid rgba(218,192,196,.1)"><div style="width:7px;height:7px;border-radius:50%;background:#1b6a5b"></div><span style="font-size:11px;font-weight:700;color:#1b6a5b">Active</span></div></div></div><div style="height:80px"></div>', unsafe_allow_html=True)
 
-    # Initialize chat history
+
     if "chat_history" not in st.session_state:
         results = st.session_state.get("results", {})
         score = results.get("pred_score", "N/A")
@@ -26,17 +26,17 @@ def show_coach():
             }
         ]
 
-    # Session header
+
     st.markdown('<div style="text-align:center;margin-bottom:24px"><p style="font-size:10px;text-transform:uppercase;letter-spacing:2px;color:rgba(84,66,70,.5);font-weight:700">Today\'s Focus: Wellness & Cognition</p><div style="height:1px;width:40px;background:rgba(218,192,196,.3);margin:8px auto 0"></div></div>', unsafe_allow_html=True)
 
-    # Render chat messages
+
     for msg in st.session_state["chat_history"]:
         if msg["role"] == "assistant":
             _render_ai_message(msg["content"], msg.get("time", ""))
         else:
             _render_user_message(msg["content"], msg.get("time", ""))
 
-    # Dashboard nav button
+
     nav1, spacer, nav2 = st.columns([2, 6, 2])
     with nav1:
         if st.button("← Dashboard", use_container_width=True, key="coach_to_dash"):
@@ -47,7 +47,7 @@ def show_coach():
             st.session_state.pop("chat_history", None)
             st.rerun()
 
-    # Chat input
+
     user_input = st.chat_input("Type your message to AcadIQ Coach...", key="coach_input")
 
     if user_input:
@@ -65,7 +65,7 @@ def show_coach():
         })
         st.rerun()
 
-    # Footer
+
     st.markdown('<div style="text-align:center;padding:16px 0"><div style="display:flex;justify-content:center;gap:24px"><span style="font-size:10px;color:rgba(84,66,70,.4);font-weight:700;text-transform:uppercase;letter-spacing:1.5px">✓ AI-Generated Insights</span><span style="font-size:10px;color:rgba(84,66,70,.4);font-weight:700;text-transform:uppercase;letter-spacing:1.5px">🔒 Privacy Protected</span></div></div>', unsafe_allow_html=True)
 
 
@@ -84,7 +84,7 @@ def _get_coach_reply(message: str) -> str:
     token = st.session_state.get("auth_token")
     results = st.session_state.get("results", {})
 
-    # Try backend
+
     if token:
         try:
             profile = {
@@ -111,7 +111,7 @@ def _get_coach_reply(message: str) -> str:
         except Exception:
             pass
 
-    # Fallback: local response
+
     msg_lower = message.lower()
 
     if any(w in msg_lower for w in ["plan", "schedule", "7-day", "week"]):

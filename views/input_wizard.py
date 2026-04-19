@@ -48,7 +48,7 @@ def show_input_wizard(models: dict):
 
     _render_header()
 
-    # Initialize wizard state
+
     if "wizard_step" not in st.session_state:
         st.session_state["wizard_step"] = 0
     if "wizard_data" not in st.session_state:
@@ -59,7 +59,7 @@ def show_input_wizard(models: dict):
 
     _render_progress(step)
 
-    # Two-column layout: form + sidebar
+
     form_col, info_col = st.columns([7, 5], gap="large")
 
     with form_col:
@@ -77,7 +77,7 @@ def show_input_wizard(models: dict):
     with info_col:
         _render_sidebar_info(step)
 
-    # Navigation buttons
+
     st.markdown("<div style='height:24px'></div>", unsafe_allow_html=True)
     nav_left, nav_spacer, nav_right = st.columns([2, 5, 2])
 
@@ -100,11 +100,11 @@ def show_input_wizard(models: dict):
             if st.button("Run Prediction →", type="primary", use_container_width=True, key="wizard_run"):
                 _run_prediction(data, models)
 
-    # Footer
+
     st.markdown('<div style="border-top:1px solid rgba(218,192,196,.15);padding:24px 40px;margin-top:40px;display:flex;justify-content:space-between;align-items:center;font-family:Manrope,sans-serif"><span style="font-size:11px;font-weight:600;color:rgba(26,28,27,.32);text-transform:uppercase;letter-spacing:1.5px">© 2024 AcadIQ Analytics</span><div style="display:flex;gap:20px"><span style="font-size:11px;font-weight:700;color:rgba(26,28,27,.32);text-transform:uppercase;letter-spacing:1.5px">Privacy Policy</span><span style="font-size:11px;font-weight:700;color:rgba(26,28,27,.32);text-transform:uppercase;letter-spacing:1.5px">Research Docs</span></div></div>', unsafe_allow_html=True)
 
 
-# ─── Step Renderers ──────────────────────────────────────────────────────────
+
 
 def _step_academic(data: dict):
     st.markdown('<p style="font-size:13px;color:#544246;margin-bottom:20px;font-style:italic">Used to track short-term knowledge retention and consistency.</p>', unsafe_allow_html=True)
@@ -211,7 +211,7 @@ def _step_personal(data: dict):
         key="wiz_internet"
     )
 
-    # Live summary
+
     st.markdown("<div style='height:16px'></div>", unsafe_allow_html=True)
     st.markdown('<div style="font-family:Manrope,sans-serif;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:2px;color:#877276;margin-bottom:12px">Live Summary</div>', unsafe_allow_html=True)
 
@@ -222,7 +222,7 @@ def _step_personal(data: dict):
     m2.metric("Distractions", f"{total_dist:.1f}h")
 
 
-# ─── Run Prediction ──────────────────────────────────────────────────────────
+
 
 def _run_prediction(data: dict, models: dict):
     """Process wizard data through ML models."""

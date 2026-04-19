@@ -23,7 +23,7 @@ def get_client() -> MongoClient:
 def get_db() -> Database:
     client = get_client()
     db = client["acadiq"]
-    # Ensure unique index on email
+
     db["users"].create_index([("email", ASCENDING)], unique=True)
     return db
 
@@ -44,7 +44,7 @@ def user_exists(email: str) -> bool:
     return db["users"].count_documents({"email": email}) > 0
 
 
-# ─── Reports ──────────────────────────────────────────────────────────────────
+
 
 def insert_report(report: dict) -> str:
     db = get_db()

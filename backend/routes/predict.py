@@ -17,8 +17,8 @@ async def predict(
         raw = student_input.model_dump()
         result = ml_service.run_predictions(raw)
         response = PredictionResponse(**result)
-        
-        # Save report to database
+
+
         report = {
             "user_email": current_user,
             "timestamp": datetime.utcnow().isoformat(),
@@ -26,7 +26,7 @@ async def predict(
             "input_data": raw
         }
         insert_report(report)
-        
+
         return response
     except RuntimeError as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -38,7 +38,7 @@ async def predict(
 async def get_reports_history(current_user: str = Depends(get_current_user)):
     try:
         reports = get_reports_by_user(current_user)
-        # Convert ObjectId to string
+
         for report in reports:
             report["id"] = str(report["_id"])
             del report["_id"]

@@ -42,11 +42,11 @@ def show_dashboard():
 
     _render_topbar()
 
-    # ── Page Header ──────────────────────────────────────────────────────────
+
     st.markdown(f'<h1 style="font-family:Manrope,sans-serif;font-size:34px;font-weight:900;color:#1a1c1b;letter-spacing:-1px;margin:0 0 4px 0">Your Insights</h1>', unsafe_allow_html=True)
     st.markdown(f'<p style="color:#544246;font-size:14px;font-weight:500;margin-bottom:24px">Academic performance analysis for {st.session_state.get("user_name", "User")}</p>', unsafe_allow_html=True)
 
-    # Action buttons
+
     btn1, btn2, spacer = st.columns([1.5, 1.8, 6])
     with btn1:
         if st.button("← New Analysis", use_container_width=True, key="dash_new"):
@@ -61,7 +61,7 @@ def show_dashboard():
 
     st.markdown("<div style='height:16px'></div>", unsafe_allow_html=True)
 
-    # ── Row 1: Score card + Learner profile ──────────────────────────────────
+
     score_col, profile_col = st.columns([7, 5], gap="medium")
 
     with score_col:
@@ -72,7 +72,7 @@ def show_dashboard():
 
         st.markdown(f'<div style="background:#fff;border-radius:22px;padding:32px;border:1px solid rgba(218,192,196,.12);position:relative;overflow:hidden"><div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#510122,#6e1a37,#ae2448)"></div><div style="display:flex;justify-content:space-between;align-items:flex-start"><div><span style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:2px;color:rgba(81,1,34,.6);display:block;margin-bottom:8px">Performance Prediction</span><div style="font-family:Manrope,sans-serif;font-size:52px;font-weight:900;color:#1a1c1b;letter-spacing:-3px;line-height:1">{int(score)}<span style="font-size:18px;color:rgba(26,28,27,.3);vertical-align:super">/100</span></div></div><div style="background:{badge_bg};padding:8px 16px;border-radius:99px"><span style="color:{badge_color};font-weight:700;font-size:13px">{badge_icon} {pass_text}</span></div></div><div style="margin-top:24px"><div style="display:flex;justify-content:space-between;font-size:13px;font-weight:600;margin-bottom:8px"><span style="color:#544246">Confidence</span><span style="color:#510122">{max(0,int(score)-3)} – {min(100,int(score)+3)} range</span></div><div style="height:10px;background:#e9e8e6;border-radius:99px;overflow:hidden"><div style="height:100%;width:{score}%;background:#510122;border-radius:99px;box-shadow:0 0 12px rgba(81,1,34,.3)"></div></div></div></div>', unsafe_allow_html=True)
 
-        # Grade badge
+
         st.markdown(f'<div style="display:flex;gap:16px;margin-top:12px"><div style="background:#fff;border-radius:16px;padding:18px 24px;border:1px solid rgba(218,192,196,.12);flex:1;text-align:center"><div style="font-family:Manrope;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;color:#877276;margin-bottom:4px">Grade</div><div style="font-family:Manrope;font-size:32px;font-weight:900;color:#510122">{grade}</div></div><div style="background:#fff;border-radius:16px;padding:18px 24px;border:1px solid rgba(218,192,196,.12);flex:1;text-align:center"><div style="font-family:Manrope;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;color:#877276;margin-bottom:4px">Status</div><div style="font-family:Manrope;font-size:20px;font-weight:800;color:{badge_color}">{result_l}</div></div><div style="background:#fff;border-radius:16px;padding:18px 24px;border:1px solid rgba(218,192,196,.12);flex:1;text-align:center"><div style="font-family:Manrope;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;color:#877276;margin-bottom:4px">Pass Prob</div><div style="font-family:Manrope;font-size:32px;font-weight:900;color:#1b6a5b">{results["pass_probability"]}%</div></div></div>', unsafe_allow_html=True)
 
     with profile_col:
@@ -80,7 +80,7 @@ def show_dashboard():
 
     st.markdown("<div style='height:20px'></div>", unsafe_allow_html=True)
 
-    # ── Row 2: Radar chart + Recommendations ─────────────────────────────────
+
     chart_col, rec_col = st.columns([7, 5], gap="medium")
 
     with chart_col:
@@ -101,7 +101,7 @@ def show_dashboard():
             st.session_state["page"] = "coach"
             st.rerun()
 
-    # ── Input Summary ────────────────────────────────────────────────────────
+
     st.markdown("<div style='height:24px'></div>", unsafe_allow_html=True)
     with st.expander("View full input summary"):
         import pandas as pd
@@ -119,11 +119,11 @@ def show_dashboard():
         }]).T.rename(columns={0: "Value"}).astype(str)
         st.dataframe(summary, use_container_width=True)
 
-    # Footer
+
     st.markdown('<div style="border-top:1px solid rgba(218,192,196,.15);padding:24px 0;margin-top:40px;display:flex;justify-content:space-between;align-items:center"><span style="font-family:Manrope;font-size:11px;font-weight:600;color:rgba(26,28,27,.32);text-transform:uppercase;letter-spacing:1.5px">© 2024 AcadIQ Analytics</span><div style="display:flex;gap:20px"><span style="font-size:11px;font-weight:700;color:rgba(26,28,27,.32);text-transform:uppercase;letter-spacing:1.5px">Privacy</span><span style="font-size:11px;font-weight:700;color:rgba(26,28,27,.32);text-transform:uppercase;letter-spacing:1.5px">Terms</span></div></div>', unsafe_allow_html=True)
 
 
-# ─── Chart Helpers ───────────────────────────────────────────────────────────
+
 
 def _render_radar(results: dict):
     """Radar chart — you vs average."""

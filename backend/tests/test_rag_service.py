@@ -21,7 +21,7 @@ class TestRAGService:
         }):
             import importlib
             import sys
-            # Remove cached module if present
+
             sys.modules.pop("services.rag_service", None)
             import services.rag_service as rag_module
             rag_module._vector_store = mock_store

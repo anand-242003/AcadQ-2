@@ -8,16 +8,16 @@ API_BASE = "http://localhost:8000"
 def show_login_page():
     """Render the login page."""
 
-    # CSS for the page
+
     st.markdown("""<style>
 .login-brand-panel{background:linear-gradient(135deg,#510122 0%,#6e1a37 50%,#7a002a 100%);border-radius:22px;padding:48px;color:#fff;position:relative;overflow:hidden;min-height:500px;display:flex;flex-direction:column;justify-content:space-between}
 .login-brand-panel::before{content:'';position:absolute;inset:0;background:url('https://lh3.googleusercontent.com/aida-public/AB6AXuDw1Q0yuBGiuEqXgihVSyGur9EUaFQKWsUJyvkwG1FbNEQsvMf7psobWQPlJgk2RjAXNVPX49wMJ1t11wl7ZcOYKUDmnEtglh0qTjsaG1tQAC2LxTw0yzU3pn0O7OIzDDeFGHqqPNuReN11hb4Fs5pBkiQgvJAsRzsQTUBgU9A2boP1XqZqR3fWVoU3tZE4Rdwo5VmmHFrg75qxxxzFjQtotTYydoaEjVtyMTnB3eSZ7qoLvE2Sps7bE3qNHVBJgbYnl9b7_tikrliw') center/cover;opacity:.15;mix-blend-mode:overlay}
 </style>""", unsafe_allow_html=True)
 
-    # Top bar
+
     st.markdown('<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0 24px"><a href="/?p=dash" style="text-decoration:none;"><span style="font-family:Manrope,sans-serif;font-size:22px;font-weight:900;color:#6e1a37;letter-spacing:-0.5px">AcadIQ</span></a><span></span></div>', unsafe_allow_html=True)
 
-    # Two-column layout
+
     brand_col, form_col = st.columns([1, 1], gap="large")
 
     with brand_col:
@@ -61,7 +61,7 @@ def show_login_page():
                 except Exception as e:
                     st.error(f"Login failed: {e}")
 
-        # Divider
+
         st.markdown('<div style="display:flex;align-items:center;gap:16px;margin:24px 0"><div style="flex:1;height:1px;background:rgba(218,192,196,.15)"></div><span style="font-size:11px;text-transform:uppercase;letter-spacing:2px;color:rgba(84,66,70,.4)">or</span><div style="flex:1;height:1px;background:rgba(218,192,196,.15)"></div></div>', unsafe_allow_html=True)
 
         if st.button("Continue in Demo Mode", use_container_width=True, key="login_demo"):

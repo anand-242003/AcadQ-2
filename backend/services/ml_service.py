@@ -5,9 +5,9 @@ import numpy as np
 import pandas as pd
 from pathlib import Path
 
-# ─── Model Loading ────────────────────────────────────────────────────────────
 
-BASE_DIR = Path(__file__).resolve().parent.parent.parent  # project root
+
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 MODEL_DIR = BASE_DIR / "model"
 DATA_DIR = BASE_DIR / "Data"
 
@@ -25,7 +25,7 @@ def load_models() -> dict:
         _models['cluster_label_map'] = joblib.load(MODEL_DIR / "cluster_label_map.pkl")
         _models['loaded']            = True
 
-        # Precompute dataset column means for weakness computation
+
         dataset_path = DATA_DIR / "StudentDataset.csv"
         if dataset_path.exists():
             df = pd.read_csv(dataset_path)
@@ -49,20 +49,20 @@ def get_models() -> dict:
     return _models
 
 
-# ─── Preprocessing ────────────────────────────────────────────────────────────
+
 
 def preprocess_input(raw: dict, models: dict):
     """Replicates Milestone 1 preprocessing pipeline exactly."""
     df = pd.DataFrame([raw])
 
-    # Categorical encoding — must match training encoding
+
     df['gender']            = df['gender'].map({'Male': 1, 'Female': 0, 'Other': 2})
     df['academic_level']    = df['academic_level'].map({'High School': 0, 'Undergraduate': 1, 'Postgraduate': 1})
     df['internet_quality']  = df['internet_quality'].map({'Good': 1, 'Excellent': 1, 'Average': 0, 'Poor': 0})
     df['part_time_job']     = 1 if raw['part_time_job']     == 'Yes' else 0
     df['upcoming_deadline'] = 1 if raw['upcoming_deadline'] == 'Yes' else 0
 
-    # Feature engineering — must match Milestone 1 derived features
+
     df['total_active_hours']      = df['study_hours'] + df['self_study_hours'] + df['online_classes_hours']
     df['total_distraction_hours'] = df['social_media_hours'] + df['gaming_hours']
     df['study_distraction_ratio'] = df['study_hours'] / df['total_distraction_hours'].replace(0, 0.1)
@@ -74,7 +74,7 @@ def preprocess_input(raw: dict, models: dict):
                                      + df['screen_time_hours'] * 0.3
                                      + (10 - df['sleep_hours']) * 0.2)
 
-    # Align to training feature columns
+
     cols = models['feature_columns']
     for c in cols:
         if c not in df.columns:
@@ -88,7 +88,7 @@ def preprocess_input(raw: dict, models: dict):
     return scaled_df, unscaled_df
 
 
-# ─── Learner Type Resolution ──────────────────────────────────────────────────
+
 
 def _resolve_learner_type(score: float, pass_prob: float, cluster_label: str) -> str:
     """Exact replication of Milestone 1 _resolve_learner_type logic."""
@@ -103,7 +103,7 @@ def _resolve_learner_type(score: float, pass_prob: float, cluster_label: str) ->
     return "At Risk Learner"
 
 
-# ─── Top Weaknesses ───────────────────────────────────────────────────────────
+
 
 NUMERIC_FEATURES = [
     'study_hours', 'self_study_hours', 'online_classes_hours',
@@ -143,7 +143,7 @@ def compute_top_weaknesses(raw: dict, models: dict, k: int = 3) -> list:
     return candidates[:k]
 
 
-# ─── Recommendations ─────────────────────────────────────────────────────────
+
 
 def _strip_emoji(text: str) -> str:
     return re.sub(
@@ -217,7 +217,7 @@ def generate_recommendations(results: dict) -> list:
     return tips
 
 
-# ─── Grade Computation ────────────────────────────────────────────────────────
+
 
 def get_grade(score: float) -> str:
     if score >= 75:
@@ -231,7 +231,7 @@ def get_grade(score: float) -> str:
     return "F"
 
 
-# ─── Main Prediction Function ─────────────────────────────────────────────────
+
 
 def run_predictions(raw: dict) -> dict:
     models = get_models()
@@ -251,7 +251,7 @@ def run_predictions(raw: dict) -> dict:
     ltype        = _resolve_learner_type(pred_score, pass_prob, raw_ltype)
     grade        = get_grade(pred_score)
 
-    # Build results dict for recommendations (matches Milestone 1 format)
+
     results_for_recs = {
         "pred_score"          : pred_score,
         "pred_learner_type"   : ltype,

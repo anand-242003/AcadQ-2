@@ -15,11 +15,11 @@ def show_resources():
 
     from pathlib import Path
     import base64
-    
-    # Check if there's plan-recommended resources or if we should fetch from folder
+
+
     resources = st.session_state.get("plan_resources", [])
-    
-    # Map for meaningful extracts provided by user
+
+
     MEANINGFUL_EXTRACTS = {
         "Cepeda2006": """the item to be unrecoverable; see Pashler et al., 2005) This feed- back hypothesis is supported by a single study (Cull, Shaughnessy, & Zechmeister, 1996). Unfortunately, the feedback hypothesis cannot be tested adequately with current data, because all three of the studies using (page 12)""",
         "Procrastination_2": """itchell, 1997) and thus can offer only limited contributions. Consequently, there is much interesting work to be done in the scientific fundamentals of description, prediction, and control. To begin with, although this review strongly indicates that TMT provides an excellent desc (page 19)""",
@@ -52,33 +52,33 @@ def show_resources():
                     "title": p.stem.replace("_", " "),
                     "url": p.name
                 })
-        
-        # Add the additional paper provided via URL if not already present
+
+
         resources.append({
             "title": "Learning and Memory Under Stress",
             "topic": "Cognitive Science",
             "description": "Implications for the classroom and student performance under pressure.",
-            "url": "Learning_And_Memory_Under_Stress" 
+            "url": "Learning_And_Memory_Under_Stress"
         })
-                
+
     if not resources:
         st.info("No resource files found in backend/data/resoureces.")
         return
 
-    # Post-process all resources to add topic, extract, and file_path
+
     RES_DIR = Path("backend/data/resoureces")
     for r in resources:
         url = r.get("url", "")
         stem = Path(url).stem if url else r.get("title", "").replace(" ", "_")
-        
+
         if not r.get("topic"):
             r["topic"] = "Cognitive Science" if "cognitive" in stem.lower() or "sweller" in stem.lower() else ("Wellness" if "sleep" in stem.lower() else "Research Paper")
-        
+
         if not r.get("file_path") and url:
             p = RES_DIR / url
             if p.exists():
                 r["file_path"] = str(p)
-                
+
         if not r.get("extract"):
             r["extract"] = MEANINGFUL_EXTRACTS.get(stem, "")
             if not r["extract"] and r.get("file_path"):
@@ -95,9 +95,9 @@ def show_resources():
         url = r.get("url", "")
         stem = Path(url).stem if url else r.get("title", "").replace(" ", "_")
         web_link = RESOURCE_WEB_URLS.get(stem)
-        
+
         st.markdown(f'<div style="background:#fff;border-radius:20px;padding:32px;border:1px solid rgba(218,192,196,.15);margin-top:24px;box-shadow:0 8px 24px rgba(81,1,34,.03);display:flex;align-items:flex-start;gap:20px"><div style="width:50px;height:50px;border-radius:14px;background:rgba(167,241,222,.2);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0">📚</div><div><div style="display:flex;align-items:center;gap:12px;margin-bottom:8px"><h3 style="font-family:Manrope,sans-serif;font-size:18px;font-weight:800;color:#510122;margin:0">{r.get("title", "Resource")}</h3><span style="font-size:10px;font-weight:800;color:#1b6a5b;background:rgba(27,106,91,.1);padding:4px 10px;border-radius:99px;text-transform:uppercase;letter-spacing:1px">{r.get("topic", "Material")}</span></div><p style="font-size:13.5px;color:#544246;margin:0;line-height:1.6">{r.get("description", "")}</p></div></div>', unsafe_allow_html=True)
-        
+
         c1, c2 = st.columns([1, 1])
         with c1:
             if r.get("extract"):
@@ -105,10 +105,10 @@ def show_resources():
                     st.write(r["extract"])
         with c2:
             if web_link:
-                # Direct web link
+
                 st.markdown(f'<a href="{web_link}" target="_blank" style="background:#510122;color:#fff;text-decoration:none;font-size:12px;font-weight:700;padding:8px 16px;border-radius:10px;display:inline-block;margin-top:8px;text-align:center;width:100%">Open Full Resource</a>', unsafe_allow_html=True)
             elif r.get("file_path"):
-                # Fallback to local base64
+
                 with open(r["file_path"], "rb") as f:
                     base64_pdf = base64.b64encode(f.read()).decode('utf-8')
                     pdf_link = f'<a href="data:application/pdf;base64,{base64_pdf}" target="_blank" style="background:#510122;color:#fff;text-decoration:none;font-size:12px;font-weight:700;padding:8px 16px;border-radius:10px;display:inline-block;margin-top:8px;text-align:center;width:100%">Open Full PDF</a>'

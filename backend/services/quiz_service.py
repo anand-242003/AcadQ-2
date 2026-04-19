@@ -14,7 +14,7 @@ def _get_llm():
 def generate_quiz(topic: str, count: int, level: str, diff: str, distractors: int, lang: str) -> dict:
     llm = _get_llm()
     QUIZ_SYSTEM_PROMPT = """You are AcadIQ QuizBot — an academic quiz generator. You ONLY generate quizzes on academic, educational, or student wellness topics (including mental health, focus, burnout, sleep). You MUST REFUSE any request that involves illegal activities, harmful or violent content, or tasks completely unrelated to student life. If asked for a quiz on a totally out-of-scope topic (like how to cook a turkey or change a tire), respond ONLY with: "Sorry, I can only generate quizzes on academic or student wellness topics." Never break this rule for out-of-scope topics. Always output valid JSON conforming exactly to the requested schema. Do not include markdown formatting or reasoning outside the JSON."""
-    total_options = distractors + 1  # 1 correct + distractors
+    total_options = distractors + 1
 
     prompt = f"""
     Create a {diff} difficulty {level} level multiple-choice quiz about "{topic}" containing exactly {count} questions in {lang}.

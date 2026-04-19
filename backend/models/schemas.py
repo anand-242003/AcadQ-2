@@ -2,7 +2,7 @@ from pydantic import BaseModel, Field, EmailStr
 from typing import Literal, Optional
 
 
-# ─── Student Input ────────────────────────────────────────────────────────────
+
 
 class StudentInput(BaseModel):
     age: int = Field(ge=16, le=40, default=20)
@@ -30,13 +30,13 @@ class StudentInput(BaseModel):
     topics_completed: int = Field(ge=0, le=50, default=15)
 
 
-# ─── Prediction Response ──────────────────────────────────────────────────────
+
 
 class WeaknessItem(BaseModel):
     feature: str
     student_value: float
     dataset_average: float
-    delta: float  # student_value - dataset_average (negative = below average)
+    delta: float
 
 
 class RecommendationItem(BaseModel):
@@ -56,21 +56,21 @@ class PredictionResponse(BaseModel):
     recommendations: list[RecommendationItem]
 
 
-# ─── Report Schemas ───────────────────────────────────────────────────────────
+
 
 class ReportItem(BaseModel):
-    id: str  # MongoDB ObjectId as string
+    id: str
     user_email: str
-    timestamp: str  # ISO format
+    timestamp: str
     prediction: PredictionResponse
-    input_data: StudentInput  # Store the input for reference
+    input_data: StudentInput
 
 
 class ReportsHistoryResponse(BaseModel):
     reports: list[ReportItem]
 
 
-# ─── Auth Schemas ─────────────────────────────────────────────────────────────
+
 
 class RegisterRequest(BaseModel):
     name: str = Field(min_length=2, max_length=50)
@@ -94,7 +94,7 @@ class UserResponse(BaseModel):
     email: str
 
 
-# ─── Coach Schemas ────────────────────────────────────────────────────────────
+
 
 class StudentProfile(BaseModel):
     predicted_score: float
@@ -144,7 +144,7 @@ class DiagnoseResponse(BaseModel):
 class MessageResponse(BaseModel):
     message: str
 
-# ─── Quiz Schemas ─────────────────────────────────────────────────────────────
+
 
 class QuizGenerateRequest(BaseModel):
     topic: str = Field(..., min_length=1, max_length=100)
@@ -156,7 +156,7 @@ class QuizGenerateRequest(BaseModel):
     language: str = Field(default="English (USA)")
 
 class QuizOption(BaseModel):
-    label: str  # e.g., "A", "B", "C"
+    label: str
     text: str
 
 class QuizQuestion(BaseModel):

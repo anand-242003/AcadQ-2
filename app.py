@@ -28,7 +28,11 @@ if not models.get("loaded"):
 
 # ── Page Routing ─────────────────────────────────────────────────────────────
 if "p" in st.query_params:
-    st.session_state["page"] = "dashboard" if st.query_params["p"] == "dash" else "landing"
+    val = st.query_params["p"]
+    if val in ["dash", "plan", "quiz", "resources"]:
+        st.session_state["page"] = "dashboard" if val == "dash" else val
+    else:
+        st.session_state["page"] = "landing"
     st.query_params.clear()
 
 if "page" not in st.session_state:
@@ -59,6 +63,18 @@ elif page == "dashboard":
 elif page == "coach":
     from views.coach import show_coach
     show_coach()
+
+elif page == "plan":
+    from views.plan import show_plan
+    show_plan()
+
+elif page == "quiz":
+    from views.quiz import show_quiz_bot
+    show_quiz_bot()
+
+elif page == "resources":
+    from views.resources import show_resources
+    show_resources()
 
 else:
     st.error(f"Unknown page: {page}")

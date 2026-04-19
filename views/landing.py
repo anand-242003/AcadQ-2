@@ -15,9 +15,9 @@ def _nav():
 <div class="nav-bar">
 <div class="nav-logo">AcadIQ</div>
 <div class="nav-links">
-<a href="#" class="nav-link nav-link-active">Predictor</a>
-<a href="#" class="nav-link">Coach</a>
-<a href="#" class="nav-link">Methodology</a>
+<a href="/?p=dash" class="nav-link nav-link-active">Predictor</a>
+<a href="/?p=coach" class="nav-link">Coach</a>
+<a href="/?p=methodology" class="nav-link">Methodology</a>
 </div>
 <div></div>
 </div>""", unsafe_allow_html=True)

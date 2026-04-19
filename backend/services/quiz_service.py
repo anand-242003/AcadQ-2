@@ -39,5 +39,5 @@ def generate_quiz(topic: str, count: int, level: str, diff: str, distractors: in
     }}
     """
 
-    res = llm.invoke([system_prompt, HumanMessage(content=prompt)])
+    res = llm.invoke([SystemMessage(content=QUIZ_SYSTEM_PROMPT), HumanMessage(content=prompt)])
     return json.loads(res.content)

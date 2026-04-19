@@ -1,6 +1,9 @@
 from datetime import datetime, timedelta
 from collections import defaultdict
-from fastapi import APIRouter, HTTPException, Depends
+from pathlib import Path
+from urllib.parse import quote
+
+from fastapi import APIRouter, HTTPException, Depends, Request
 
 from models.schemas import (
     CoachChatRequest, CoachChatResponse,
@@ -46,6 +49,33 @@ HARMFUL_OUTPUT_SIGNALS = [
 
 OFF_TOPIC_SAFE_RESPONSE = "I can only assist with academic and study related questions!"
 INPUT_BLOCKED_RESPONSE = "I can only help with study-related topics. Please ask me something about your academics!"
+
+
+def _build_resource_url(raw_url: str, request: Request) -> str:
+    """Return a fully-qualified, openable URL for a retrieved resource."""
+    url = (raw_url or "").strip()
+    if not url:
+        return ""
+
+    lower = url.lower()
+    if lower.startswith("http://") or lower.startswith("https://"):
+        return url
+
+    file_name = Path(url).name
+    if not file_name:
+        return ""
+
+    base_url = str(request.base_url).rstrip("/")
+    return f"{base_url}/resources/files/{quote(file_name)}"
+
+
+def _normalize_resource_urls(resources: list[dict], request: Request) -> list[dict]:
+    normalized: list[dict] = []
+    for item in resources:
+        data = dict(item)
+        data["url"] = _build_resource_url(str(data.get("url", "")), request)
+        normalized.append(data)
+    return normalized
 
 
 def _check_rate_limit(user_email: str) -> None:
@@ -112,6 +142,7 @@ async def diagnose(
 @router.post("/plan", response_model=StudyPlanResponse)
 async def plan(
     request: StudyPlanRequest,
+    http_request: Request,
     current_user: str = Depends(get_current_user),
 ):
     try:
@@ -124,6 +155,7 @@ async def plan(
             query = f"{profile.get('learner_type', 'student')} study improvement"
 
         resources = rag_service.retrieve_resources(query, k=3)
+        resources = _normalize_resource_urls(resources, http_request)
 
         if not resources and rag_service._vector_store is None:
             raise HTTPException(status_code=503, detail="Resource database not ready")
